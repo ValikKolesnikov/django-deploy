@@ -1,0 +1,35 @@
+version: "3.7"
+
+services: 
+    backend:
+        tty: true
+        build: ./elearning_app
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes: 
+            - ./elearning_app:/usr/src/app/backend/
+        ports:
+            - 8000:8000
+        depends_on:
+            - db
+        env_file:
+            - .envs/.env.dev
+    db:
+        image: postgres:alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        environment: 
+            - POSTGRES_USER=elearningapp
+            - POSTGRES_PASSWORD=elearningapp
+            - POSTGRES_DB=django_db
+    frontend:
+        build: 
+            context: frontend/
+            dockerfile: ./Dockerfile
+        depends_on: 
+            - backend
+        volumes: 
+            - frontend:/urs/src/app/frontend/
+        command: npm run serve
+volumes: 
+    postgres_data:
+    frontend:

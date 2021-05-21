@@ -1,0 +1,52 @@
+version: "3.7"
+
+services: 
+    backend:
+        tty: true
+        build: 
+            context: elearning_app/
+            dockerfile: ./Dockerfile
+        command: sh /usr/src/app/backend/start.sh
+        expose:
+            - 8000
+        depends_on:
+            - db
+        env_file:
+            - .envs/.env.prod
+        volumes:
+            - static_volume:/usr/src/app/backend/static
+            - media_volume:/usr/src/app/backend/media
+        
+    db:
+        image: postgres:alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        environment: 
+            - POSTGRES_USER=elearningapp
+            - POSTGRES_PASSWORD=elearningapp
+            - POSTGRES_DB=django_db
+    nginx:
+        build: ./nginx
+        ports: 
+            - 80:80
+        depends_on: 
+            - backend
+            - frontend
+        volumes:
+            - static_volume:/usr/src/app/backend/static
+            - media_volume:/usr/src/app/backend/media
+    frontend:
+        build: 
+            context: frontend/
+            dockerfile: ./Dockerfile
+        depends_on: 
+            - backend
+        expose:
+            - 8080
+        command: serve --single -p 8080 dist
+        
+volumes: 
+    postgres_data:
+    static_volume:
+    media_volume:
+    frontend:
