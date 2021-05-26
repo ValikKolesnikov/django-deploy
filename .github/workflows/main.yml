@@ -42,39 +42,39 @@ jobs:
           docker push ${{ env.BACKEND_IMAGE }}
           docker push ${{ env.NGINX_IMAGE }}
 
-deploy:
-    name: Deploy to DigitalOcean
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: Checkout master
-        uses: actions/checkout@v2
-      - name: Add environment variables to .env
-        run: |
-          echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .envs/.env.prod
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .envs/.env.prod
-          echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .envs/.env.prod
-          echo WEB_IMAGE=${{ env.WEB_IMAGE }} >> .envs/.env.prod
-          echo NGINX_IMAGE=${{ env.NGINX_IMAGE }} >> .envs/.env.prod
-      - name: Add the private SSH key to the ssh-agent
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
-      - name: Build and deploy images on DigitalOcean
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:./
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
-            cd /app
-            source .env
-            docker login docker.pkg.github.com -u behumb -p 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
-            docker pull $WEB_IMAGE
-            docker pull $NGINX_IMAGE
-            docker-compose -f docker-compose.prod.yml up -d
-          ENDSSH
+  deploy:
+      name: Deploy to DigitalOcean
+      runs-on: ubuntu-latest
+      needs: build
+      if: github.ref == 'refs/heads/master'
+      steps:
+        - name: Checkout master
+          uses: actions/checkout@v2
+        - name: Add environment variables to .env
+          run: |
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .envs/.env.prod
+            echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .envs/.env.prod
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .envs/.env.prod
+            echo WEB_IMAGE=${{ env.WEB_IMAGE }} >> .envs/.env.prod
+            echo NGINX_IMAGE=${{ env.NGINX_IMAGE }} >> .envs/.env.prod
+        - name: Add the private SSH key to the ssh-agent
+          env:
+            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          run: |
+            mkdir -p ~/.ssh
+            ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+        - name: Build and deploy images on DigitalOcean
+          env:
+            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          run: |
+            scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:./
+            ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
+              cd /app
+              source .env
+              docker login docker.pkg.github.com -u behumb -p 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
+              docker pull $WEB_IMAGE
+              docker pull $NGINX_IMAGE
+              docker-compose -f docker-compose.prod.yml up -d
+            ENDSSH
