@@ -70,11 +70,11 @@ jobs:
           env:
             SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           run: |
-            scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:./
+            scp  -o StrictHostKeyChecking=no -r ./.envs ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:./
             ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
               cd /app
               source .env
-              docker login docker.pkg.github.com -u behumb -p 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
+              docker login docker.pkg.github.com -u behumb -p "${{ secrets.PACKAGE_TOKEN }}"
               docker pull $WEB_IMAGE
               docker pull $NGINX_IMAGE
               docker-compose -f docker-compose.prod.yml up -d
