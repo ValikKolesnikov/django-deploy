@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master
-        uses: actions/checkout@v2
+        uses: actions/core
       - name: Add environment variables to .env.prod
         run: |
           mkdir .envs
@@ -22,7 +22,6 @@ jobs:
           echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .envs/.env.prod
       - name: Set environment variables
         run: |
-          echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
           echo ::set-env name=BACKEND_IMAGE::${{ env.BACKEND_IMAGE }}
           echo ::set-env name=NGINX_IMAGE::${{ env.NGINX_IMAGE }}
       - name: Log in to GitHub Packages
