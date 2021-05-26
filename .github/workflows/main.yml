@@ -20,12 +20,12 @@ jobs:
           echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .envs/.env.prod
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .envs/.env.prod
           echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .envs/.env.prod
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Set environment variables
         run: |
           echo ::set-env name=BACKEND_IMAGE::${{ env.BACKEND_IMAGE }}
           echo ::set-env name=NGINX_IMAGE::${{ env.NGINX_IMAGE }}
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
         env:
