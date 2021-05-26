@@ -78,8 +78,8 @@ jobs:
               docker login docker.pkg.github.com -u behumb -p "${{ secrets.PACKAGE_TOKEN }}"
               ls
               pwd
-              docker pull $WEB_IMAGE
-              docker pull $NGINX_IMAGE
+              docker pull ${{ env.WEB_IMAGE }}
+              docker pull ${{ env.NGINX_IMAGE }}
               docker-compose -f docker-compose.prod.yml up -d
             ENDSSH
 
