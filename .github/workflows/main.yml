@@ -79,3 +79,5 @@ jobs:
               docker pull $NGINX_IMAGE
               docker-compose -f docker-compose.prod.yml up -d
             ENDSSH
+
+            
