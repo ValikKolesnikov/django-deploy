@@ -6,27 +6,23 @@ services:
         build: 
             context: elearning_app/
             dockerfile: ./Dockerfile
+            cache_from:
+                - "${BACKEND_IMAGE}"
+        image: "${BACKEND_IMAGE}"
         command: sh /usr/src/app/backend/start.sh
         expose:
             - 8000
-        depends_on:
-            - db
         env_file:
             - .envs/.env.prod
         volumes:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
         
-    db:
-        image: postgres:alpine
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
-        environment: 
-            - POSTGRES_USER=elearningapp
-            - POSTGRES_PASSWORD=elearningapp
-            - POSTGRES_DB=django_db
     nginx:
-        build: ./nginx
+        build:
+            context: ./nginx
+            cache_from: 
+                - "${NGINX_IMAGE}"
         ports: 
             - 80:80
         depends_on: 
