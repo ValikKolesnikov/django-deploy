@@ -74,6 +74,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             ls
               cd ./app
+              mkdir elearning_app
               source .env.prod
               docker login docker.pkg.github.com -u behumb -p "${{ secrets.PACKAGE_TOKEN }}"
               ls
