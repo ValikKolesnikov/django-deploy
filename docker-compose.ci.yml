@@ -35,6 +35,8 @@ services:
         build: 
             context: frontend/
             dockerfile: ./Dockerfile
+            cache_from: 
+                - "${FRONTEND_IMAGE}"
         depends_on: 
             - backend
         expose:
