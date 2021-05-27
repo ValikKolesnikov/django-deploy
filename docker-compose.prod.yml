@@ -35,15 +35,15 @@ services:
         volumes:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
-    frontend:
-        build: 
-            context: frontend/
-            dockerfile: ./Dockerfile
-        depends_on: 
-            - backend
-        expose:
-            - 8080
-        command: serve --single -p 8080 dist
+    # frontend:
+    #     build: 
+    #         context: frontend/
+    #         dockerfile: ./Dockerfile
+    #     depends_on: 
+    #         - backend
+    #     expose:
+    #         - 8080
+    #     command: serve --single -p 8080 dist
         
 volumes: 
     postgres_data:
