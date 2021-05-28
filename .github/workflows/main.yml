@@ -77,7 +77,9 @@ jobs:
             scp  -o StrictHostKeyChecking=no -r .envs/ ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:./app
             ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
               cd ./app
-              set -o allexport source set +o allexport .envs/.env.prod 
+              set -o allexport
+              source .envs/.env.prod
+              set +o allexport
               docker login docker.pkg.github.com -u behumb -p "${{ secrets.PACKAGE_TOKEN }}"
               docker pull $BACKEND_IMAGE
               docker pull $NGINX_IMAGE
