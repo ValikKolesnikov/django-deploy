@@ -3,9 +3,9 @@ name: Continuous Integration and Delivery
 on: [push]
 
 env:
-  BACKEND_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/elearning_app
-  NGINX_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/nginx
-  FRONTEND_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/nginx
+  BACKEND_IMAGE: docker.pkg.github.com/behumb/django-deploy/elearning_app
+  NGINX_IMAGE: docker.pkg.github.com/behumb/django-deploy/nginx
+  FRONTEND_IMAGE: docker.pkg.github.com/behumb/django-deploy/frontend
 
 jobs:
   build:
@@ -92,4 +92,3 @@ jobs:
               docker pull ${{ env.FRONTEND_IMAGE }}
               docker-compose -f docker-compose.prod.yml up -d
             ENDSSH
-            
