@@ -11,8 +11,6 @@ services:
             - 8000
         depends_on:
             - db
-        env_file:
-            - .envs/.env.prod
         volumes:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
