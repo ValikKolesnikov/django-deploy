@@ -90,5 +90,11 @@ jobs:
               docker pull ${{ env.BACKEND_IMAGE }}
               docker pull ${{ env.NGINX_IMAGE }}
               docker pull ${{ env.FRONTEND_IMAGE }}
+              echo ----------------------
+              ls -a elearing_app/
+              ls -a nginx/
+              ls -a frontend/
+              echo ---------------------- 
+
               docker-compose -f docker-compose.prod.yml up -d
             ENDSSH
