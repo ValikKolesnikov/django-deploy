@@ -56,7 +56,7 @@ jobs:
         - name: Add environment variables to .env
           run: |
             mkdir .envs
-            echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" >> .envs/.env.prod
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .envs/.env.prod
             echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .envs/.env.prod
             echo DJANGO_ALLOWED_HOSTS="${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .envs/.env.prod
             echo BACKEND_IMAGE=${{ env.BACKEND_IMAGE }} >> .envs/.env.prod
