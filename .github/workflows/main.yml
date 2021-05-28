@@ -3,7 +3,7 @@ name: Continuous Integration and Delivery
 on: [push]
 
 env:
-  BACKEND_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/backend
+  BACKEND_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/elearning_app
   NGINX_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/nginx
   FRONTEND_IMAGE: docker.pkg.github.com/$GITHUB_REPOSITORY/nginx
 
