@@ -61,6 +61,7 @@ jobs:
             echo DJANGO_ALLOWED_HOSTS="${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .envs/.env.prod
             echo BACKEND_IMAGE=${{ env.BACKEND_IMAGE }} >> .envs/.env.prod
             echo NGINX_IMAGE=${{ env.NGINX_IMAGE }} >> .envs/.env.prod
+            echo FRONTEND_IMAGE=${{ env.FRONTEND_IMAGE }} >> .envs/.env.prod
         - name: Add the private SSH key to the ssh-agent
           env:
             SSH_AUTH_SOCK: /tmp/ssh_agent.sock
