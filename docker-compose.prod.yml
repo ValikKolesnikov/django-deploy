@@ -2,7 +2,7 @@ version: "3.7"
 
 services: 
     backend:
-        image: $BACKEND_IMAGE
+        image: "${BACKEND_IMAGE}"
         tty: true
         build: 
             context: elearning_app/
@@ -26,7 +26,7 @@ services:
             - POSTGRES_PASSWORD=elearningapp
             - POSTGRES_DB=django_db
     nginx:
-        image: $NGINX_IMAGE
+        image: "${NGINX_IMAGE}"
         build: ./nginx
         ports: 
             - 80:80
@@ -37,7 +37,7 @@ services:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
     frontend:
-        image: $FRONTEND_IMAGE
+        image: "${FRONTEND_IMAGE}"
         build: 
             context: frontend/
             dockerfile: ./Dockerfile
