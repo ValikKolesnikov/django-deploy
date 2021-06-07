@@ -11,7 +11,6 @@ COPY ./entrypoint.sh .
 COPY ./start.sh .
 RUN chmod +x entrypoint.sh
 RUN mkdir media
-
 COPY . .
 
 
