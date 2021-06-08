@@ -1,7 +1,8 @@
-version: "3.3"
+version: "3.7"
 
 services: 
     backend:
+        image: ${BACKEND_IMAGE}
         tty: true
         build: 
             context: elearning_app/
@@ -11,11 +12,11 @@ services:
             - 8000
         depends_on:
             - db
-        env_file:
-            - .envs/.env.prod
         volumes:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
+        env_file:
+            - .envs/.env.prod
         
     db:
         image: postgres:alpine
@@ -26,6 +27,7 @@ services:
             - POSTGRES_PASSWORD=elearningapp
             - POSTGRES_DB=django_db
     nginx:
+        image: ${NGINX_IMAGE}
         build: ./nginx
         ports: 
             - 80:80
@@ -36,6 +38,7 @@ services:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
     frontend:
+        image: ${FRONTEND_IMAGE}
         build: 
             context: frontend/
             dockerfile: ./Dockerfile
@@ -50,3 +53,4 @@ volumes:
     static_volume:
     media_volume:
     frontend:
+        

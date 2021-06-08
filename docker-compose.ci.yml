@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.7"
 
 services: 
     backend:
@@ -32,9 +32,12 @@ services:
             - static_volume:/usr/src/app/backend/static
             - media_volume:/usr/src/app/backend/media
     frontend:
+        image: "${FRONTEND_IMAGE}"
         build: 
             context: frontend/
             dockerfile: ./Dockerfile
+            cache_from: 
+                - "${FRONTEND_IMAGE}"
         depends_on: 
             - backend
         expose:

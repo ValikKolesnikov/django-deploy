@@ -60,22 +60,13 @@ class UserViewSet(viewsets.GenericViewSet):
         user = request.user
         serializer = UserResponseSerializer(user)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
     def reset_password(self, request):
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_object_or_404(User, email=serializer.validated_data['email'])
         send_reset_password_email(request, user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
-    def reset_password_confirm(self, request):
-        serializer = ResetPasswordConfirmSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        user.set_password(serializer.validated_data['password'])
-        user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
