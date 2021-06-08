@@ -14,6 +14,6 @@ six==1.15.0
 sqlparse==0.4.1
 django-environ==0.4.5
 environ~=1.0
-celery
-django-celery-beat
-django-celery-results
+celery==5.1.0
+django-celery-beat==2.2.0
+django-celery-results==2.0.1
