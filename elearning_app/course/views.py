@@ -9,6 +9,7 @@ from .serializers import CourseListResponseSerializer, CategorySerializer, Cours
 from .filters import CourseFilter
 from .permission import IsAdminOrReadOnly
 from .services import enroll_as_student
+from .tasks import create_random_courses
 
 
 class CourseViewSet(viewsets.GenericViewSet):
@@ -36,6 +37,11 @@ class CourseViewSet(viewsets.GenericViewSet):
         queryset = self.get_object()
         serializer = CourseSerializer(queryset)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'])
+    def create_random_course_num(self, request):
+        create_random_courses.delay(1000)
+        return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
     def enroll_as_student(self, request, pk=None):
