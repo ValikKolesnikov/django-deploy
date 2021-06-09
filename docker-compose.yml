@@ -44,15 +44,29 @@ services:
             - frontend
     celery:
         build: elearning_app
-        command: celery -A elearning_app worker --loglevel=INFO -B
+        command: celery -A elearning_app worker --loglevel=INFO
         volumes:
             - ./elearning_app:/usr/src/app/backend/
         links:
             - rabbitmq
         depends_on:
-            - rabbitmq
+            - celery_beat
+            - redis
         env_file:
             - .envs/.env.dev
+    celery_beat:
+        build: elearning_app
+        command: celery -A elearning_app beat
+        volumes:
+            - ./elearning_app:/usr/src/app/backend/
+        depends_on:
+            - rabbitmq
+            - redis
+        env_file:
+            - .envs/.env.dev
+    redis:
+        image: redis:alpine
+
 
 
 volumes: 

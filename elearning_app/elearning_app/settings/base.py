@@ -25,8 +25,7 @@ INSTALLED_APPS = [
     'course.apps.CourseConfig',
     'corsheaders',
     'django_filters',
-    'django_celery_beat',
-    'django_celery_results'
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -119,5 +118,5 @@ if DEBUG:
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = env.bool('CELERY_BROKER_URL', 'amqp://guest:guest@rabbitmq:5672/')
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = env.str('CELERY_BROKER_URL', 'amqp://guest:guest@rabbitmq:5672/')
+CELERY_RESULT_BACKEND = env.str('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
