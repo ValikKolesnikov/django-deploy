@@ -1,18 +1,21 @@
 version: "3.7"
 
-services: 
-    backend:
-        tty: true
+services:
+    django: &django
         build: ./elearning_app
-        command: python manage.py runserver 0.0.0.0:8000
-        volumes: 
+        volumes:
             - ./elearning_app:/usr/src/app/backend/
+        env_file:
+            - .envs/.env.dev
+
+    backend:
+        <<: *django
+        tty: true
+        command: python manage.py runserver 0.0.0.0:8000
         ports:
             - 8000:8000
         depends_on:
             - db
-        env_file:
-            - .envs/.env.dev
     db:
         image: postgres:alpine
         volumes:
@@ -42,28 +45,13 @@ services:
             - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
         depends_on: 
             - frontend
-    celery:
-        build: elearning_app
+    celery: &celery
+        <<: *django
         command: celery -A elearning_app worker --loglevel=INFO
-        volumes:
-            - ./elearning_app:/usr/src/app/backend/
-        links:
-            - rabbitmq
-        depends_on:
-            - celery_beat
-            - redis
-        env_file:
-            - .envs/.env.dev
-    celery_beat:
-        build: elearning_app
+
+    celery_beat: &celery_beat
+        <<: *django
         command: celery -A elearning_app beat
-        volumes:
-            - ./elearning_app:/usr/src/app/backend/
-        depends_on:
-            - rabbitmq
-            - redis
-        env_file:
-            - .envs/.env.dev
     redis:
         image: redis:alpine
 
